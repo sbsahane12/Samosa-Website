@@ -1,0 +1,148 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+</head>
+<body>
+    <%- include('../../partials/navbar1') %>
+
+    <main class="container mt-5">
+        <h1 class="text-center">Manage Products</h1>
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createProductModal">Create New Product</button>
+        <!-- Responsive Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach(product => { %>
+                        <tr>
+                            <td><%= product.name %></td>
+                            <td><%= product.description %></td>
+                            <td><%= product.price %></td>
+                            <td><%= product.category %></td>
+                            <td><%= product.stock %></td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateProductModal<%= product._id %>">Edit</button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProductModal<%= product._id %>">Delete</button>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+       <!-- Create Product Modal -->
+       <div class="modal fade" id="createProductModal" tabindex="-1" aria-labelledby="createProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createProductModalLabel">Create New Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/products/create" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <input type="text" class="form-control" id="category" name="category" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="stock" name="stock" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Product Modal -->
+    <% products.forEach(product => { %>
+        <div class="modal fade" id="updateProductModal<%= product._id %>" tabindex="-1" aria-labelledby="updateProductModalLabel<%= product._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateProductModalLabel<%= product._id %>">Update Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/products/update/<%= product._id %>" method="POST">
+                            <div class="mb-3">
+                                <label for="name<%= product._id %>" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name<%= product._id %>" name="name" value="<%= product.name %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description<%= product._id %>" class="form-label">Description</label>
+                                <textarea class="form-control" id="description<%= product._id %>" name="description" required><%= product.description %></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price<%= product._id %>" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="price<%= product._id %>" name="price" step="0.01" value="<%= product.price %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="category<%= product._id %>" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="category<%= product._id %>" name="category" value="<%= product.category %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="stock<%= product._id %>" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock<%= product._id %>" name="stock" value="<%= product.stock %>" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Product</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+
+    <!-- Delete Product Modal -->
+    <% products.forEach(product => { %>
+        <div class="modal fade" id="deleteProductModal<%= product._id %>" tabindex="-1" aria-labelledby="deleteProductModalLabel<%= product._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteProductModalLabel<%= product._id %>">Delete Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete the product "<%= product.name %>"?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/admin/products/delete/<%= product._id %>" method="POST">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</body>
+</html>

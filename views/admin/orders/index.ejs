@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders</title>
+</head>
+<body>
+    <%- include('../../partials/navbar1') %>
+
+    <main class="container mt-5">
+        <h1 class="text-center">Manage Orders</h1>
+
+        <!-- Responsive Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>User</th>
+                        <th>Total Price</th>
+                        <th>Total Reward</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                        <th>Created At</th>
+                        <th>View</th>
+                        <th>Delete</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order._id %></td>
+                            <td><%= order.user ? order.user.name : 'User not found' %></td>
+                            <td>$<%= order.totalPrice %></td>
+                            <td><%= order.totalReward %></td>
+                            <td><%= order.paymentStatus %></td>
+                            <td><%= order.orderStatus %></td>
+                            <td><%= order.createdAt.toLocaleString() %></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewItemsModal<%= order._id %>">View</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal<%= order._id %>">Delete</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#updateStatusModal<%= order._id %>">Update</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <% orders.forEach(order => { %>
+        <!-- View Items Modal -->
+        <div class="modal fade" id="viewItemsModal<%= order._id %>" tabindex="-1" aria-labelledby="viewItemsModalLabel<%= order._id %>" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewItemsModalLabel<%= order._id %>">Order Items</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <% order.items.forEach(item => { %>
+                                <li class="list-group-item">
+                                    <strong><%= item.product ? item.product.name : 'Product not found' %></strong><br>
+                                    Quantity: <%= item.quantity %><br>
+                                    Price: $<%= item.price %><br>
+                                    Reward: <%= item.reward %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Status Modal -->
+        <div class="modal fade" id="updateStatusModal<%= order._id %>" tabindex="-1" aria-labelledby="updateStatusModalLabel<%= order._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateStatusModalLabel<%= order._id %>">Update Order Status</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/orders/update/<%= order._id %>" method="POST">
+                            <div class="mb-3">
+                                <label for="paymentStatus<%= order._id %>" class="form-label">Payment Status</label>
+                                <select class="form-select" id="paymentStatus<%= order._id %>" name="paymentStatus">
+                                    <option value="Pending" <%= order.paymentStatus === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="Completed" <%= order.paymentStatus === 'Completed' ? 'selected' : '' %>>Completed</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="orderStatus<%= order._id %>" class="form-label">Order Status</label>
+                                <select class="form-select" id="orderStatus<%= order._id %>" name="orderStatus">
+                                    <option value="Processing" <%= order.orderStatus === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                    <option value="Shipped" <%= order.orderStatus === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                    <option value="Delivered" <%= order.orderStatus === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteConfirmModal<%= order._id %>" tabindex="-1" aria-labelledby="deleteConfirmModalLabel<%= order._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel<%= order._id %>">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this order?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/admin/orders/delete/<%= order._id %>" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+
+</body>
+</html>

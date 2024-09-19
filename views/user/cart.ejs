@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+</head>
+<body>
+<%- include('../partials/navbar') %>
+<div class="container cart-container">
+    <!-- Scrollable Cart Section -->
+    <div class="cart-items-scroll">
+        <% if (cart.items.length > 0) { %>
+            <% cart.items.forEach(function(item) { %>
+            <div class="item-info">
+                <div class="item-image">
+                    <img src="https://img.freepik.com/free-vector/samosa-muslim-food-dish-icon_18591-82979.jpg" alt="<%= item.product.name %> Image">
+                </div>
+                <div class="item-details">
+                    <h5><%= item.product.name %></h5>
+                    <p>Price: ₹<%= item.product.price %>, Quantity: <%= item.quantity %></p>
+                    <p>Total Amount: ₹<%= item.quantity * item.product.price %></p>
+                    <form action="/user/cart/remove/<%= item.id %>" method="get">
+                      <button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+                    </form>
+                </div>
+            </div>
+            <hr>
+            <% }); %>
+        <% } else { %>
+            <H1 class="text-center text-primary">Your cart is empty</H1>
+        <% } %>
+    </div>
+
+    <!-- Price Details Section -->
+    <% if (cart.items.length > 0) { %>
+    <div class="price-details">
+        <h5>PRICE DETAILS</h5>
+        <div class="price-summary">
+            <span>Price (<%= cart.items.length %> item<%= cart.items.length > 1 ? 's' : '' %>)</span> ₹<%= cart.totalPrice %>
+        </div>
+        <div class="price-summary">
+            <span>Delivery Charges</span> ₹<%= deliveryCharges > 0 ? deliveryCharges : 'Free' %>
+        </div>
+        <hr>
+        <div class="price-summary">
+            <span><strong>Total Amount</strong></span> <strong>₹<%= cart.totalPrice%> + ₹<%= deliveryCharges %></strong>
+        </div>
+        <p class="total-savings">You have to pay ₹<%= cart.totalPrice %> on this order</p>
+        <form action="/user/order/place" method="post">
+          <button class="btn place-order-btn">PLACE ORDER</button>
+        </form>
+    </div>
+    <% } %>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+
+        .admin-dashboard {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-dashboard h1 {
+            font-size: 2rem;
+            color: var(--dark-color);
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .admin-dashboard h1::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: var(--primary-color);
+            margin: 20px auto 0;
+        }
+
+        .admin-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .menu-item {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: calc(50% - 40px);
+            height: 200px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .menu-item:hover::before {
+            transform: scale(1);
+        }
+
+        .menu-item:hover {
+            transform: translateY(-10px);
+            background-color: var(--highlight-color);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover .icon {
+            transform: scale(1.2);
+        }
+
+        .menu-item span {
+            font-size: 1.4rem;
+            color: var(--text-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 768px) {
+            .admin-dashboard {
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .admin-dashboard h1 {
+                font-size: 1.5rem;
+                margin-bottom: 30px;
+            }
+
+            .menu-item {
+                width: 100%;
+                height: 180px;
+            }
+
+            .icon {
+                font-size: 3rem;
+            }
+
+            .menu-item span {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar1') %>
+    <div class="admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        <div class="admin-menu">
+            <a href="/admin/products" class="menu-item">
+                <i class="fas fa-box icon"></i>
+                <span>Products</span>
+            </a>
+            <a href="/admin/users" class="menu-item">
+                <i class="fas fa-users icon"></i>
+                <span>Users</span>
+            </a>
+            <a href="/admin/orders" class="menu-item">
+                <i class="fas fa-shopping-cart icon"></i>
+                <span>Orders</span>
+            </a>
+            <a href="/support" class="menu-item">
+                <i class="fas fa-headset icon"></i>
+                <span>Support</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

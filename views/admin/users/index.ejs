@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+</head>
+<body>
+    <%- include('../../partials/navbar1') %>
+
+    <main class="container mt-5">
+        <h1 class="text-center heading">Manage Users</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.phone %></td>
+                            <td><%= user.address %></td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal<%= user._id %>">Edit</button>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteUserModal<%= user._id %>">Delete</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Edit User Modals -->
+    <% users.forEach(user => { %>
+        <div class="modal fade" id="editUserModal<%= user._id %>" tabindex="-1" aria-labelledby="editUserModalLabel<%= user._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editUserModalLabel<%= user._id %>">Edit User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/users/update/<%= user._id %>" method="POST">
+                            <div class="mb-3">
+                                <label for="name<%= user._id %>" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name<%= user._id %>" name="name" value="<%= user.name %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email<%= user._id %>" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email<%= user._id %>" name="email" value="<%= user.email %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone<%= user._id %>" class="form-label">Phone</label>
+                                <input type="tel" class="form-control" id="phone<%= user._id %>" name="phone" value="<%= user.phone %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address<%= user._id %>" class="form-label">Address</label>
+                                <textarea class="form-control" id="address<%= user._id %>" name="address" required><%= user.address %></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update User</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+
+    <!-- Delete User Modals -->
+    <% users.forEach(user => { %>
+        <div class="modal fade" id="deleteUserModal<%= user._id %>" tabindex="-1" aria-labelledby="deleteUserModalLabel<%= user._id %>" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteUserModalLabel<%= user._id %>">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete the user "<%= user.name %>"?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/admin/users/delete/<%= user._id %>" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+</body>
+</html>

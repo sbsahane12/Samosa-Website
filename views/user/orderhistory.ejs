@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Orders</title>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+
+    <main class="container mt-5">
+        <h1 class="text-center">Order History</h1>
+
+        <!-- Responsive Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Total Price</th>
+                        <th>Total Reward</th>
+                        <th>Payment Status</th>
+                        <th>Order Status</th>
+                        <th>Created At</th>
+                        <th>View</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% orders.forEach(order => { %>
+                        <tr>
+                            <td><%= order._id %></td>
+                            <td>$<%= order.totalPrice %></td>
+                            <td><%= order.totalReward %></td>
+                            <td><%= order.paymentStatus %></td>
+                            <td><%= order.orderStatus %></td>
+                            <td><%= order.createdAt.toLocaleString() %></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#viewItemsModal<%= order._id %>">View</button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <% orders.forEach(order => { %>
+        <!-- View Items Modal -->
+        <div class="modal fade" id="viewItemsModal<%= order._id %>" tabindex="-1" aria-labelledby="viewItemsModalLabel<%= order._id %>" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewItemsModalLabel<%= order._id %>">Order Items</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <% order.items.forEach(item => { %>
+                                <li class="list-group-item">
+                                    <strong><%= item.product ? item.product.name : 'Product not found' %></strong><br>
+                                    Quantity: <%= item.quantity %><br>
+                                    Price: $<%= item.price %><br>
+                                    Reward: <%= item.reward %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% }); %>
+
+</body>
+</html>

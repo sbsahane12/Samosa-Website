@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reward Points</title>
+    <style>
+
+
+        h1 {
+            margin-top: 20px;
+            font-size: 2rem;
+            color: var(--dark-color);
+            text-align: center;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background-color: var(--primary-color);
+            margin: 20px auto 0;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: #ffffff;
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-size: 1.4rem;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+            transform: scale(0);
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .card-header::before {
+            transform: scale(1);
+        }
+
+        .card-header .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover .card-header .icon {
+            transform: scale(1.2);
+        }
+
+        .card-body {
+            padding: 30px;
+            position: relative;
+        }
+
+        .scratch-card-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scratch-card-container:hover {
+            transform: scale(1.05);
+        }
+
+        .total-points {
+            font-size: 3rem;
+            color: var(--text-color);
+            font-weight: bold;
+            display: none;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .scratch-card {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--highlight-color);
+            z-index: 1;
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scratched .scratch-card {
+            display: none;
+        }
+
+        .scratched .total-points {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                margin-top: 20px;
+                font-size: 1.5rem;
+                margin-bottom: 30px;
+            }
+
+            .card {
+                max-width: 100%;
+            }
+
+            .scratch-card-container {
+                height: 200px;
+            }
+
+            .total-points {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <%- include('../partials/navbar') %>
+    <div class="container">
+        <h1>Your Reward</h1>
+        <div class="card">
+            <div class="card-header">
+                <i class="icon fas fa-coins"></i>
+                <div>Reward Points</div>
+            </div>
+            <div class="card-body">
+                <div class="scratch-card-container" id="scratchCard" onclick="revealPoints()">
+                    <div class="scratch-card">Scratch to reveal your points!</div>
+                    <div class="total-points" id="totalPoints"><%= totalRewardPoints %></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function revealPoints() {
+            const scratchCard = document.getElementById('scratchCard');
+            scratchCard.classList.add('scratched');
+        }
+    </script>
+</body>
+</html>
